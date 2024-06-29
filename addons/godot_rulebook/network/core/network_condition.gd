@@ -21,8 +21,8 @@ func on_invalidate_solution(solution: Dictionary) -> void:
 
 
 func add_var_association(premise: NetworkPremise, variable: String) -> void:
-	premises_variables[premise] = variable
+	premises_variables[premise.get_hash()] = variable
 
 
 func get_premise_var(premise: NetworkPremise) -> String:
-	return premises_variables[premise]
+	return premises_variables[premise.get_hash()]

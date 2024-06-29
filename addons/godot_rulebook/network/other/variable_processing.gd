@@ -49,8 +49,9 @@ func connect_premise(premise: VariablePremise, node: CSPNode) -> void:
 
 func add_partial_constraint(premise: VariablePremise, node: CSPNode) -> void:
 	var variable: String = condition.get_premise_var(premise)
-	var partial_constraint := PartialConstraint.new( node.id, premise.attribute, premise.operator)
-	partial_constraints[variable].append(partial_constraint)
+	var partial_constraint := PartialConstraint.new(node.id, premise.attribute, premise.operator)
+	var variable_constraints = partial_constraints.get_or_add(variable, [])
+	variable_constraints.append(partial_constraint)
 
 
 func build_csp_graph() -> void:

@@ -3,6 +3,7 @@ extends EditorPlugin
 
 const MAIN_PANEL := preload("res://addons/godot_rulebook/editor/main_panel.tscn")
 const ICON := preload("res://addons/godot_rulebook/editor/assets/icons/icon.svg")
+const MANAGER_PATH := "res://addons/godot_rulebook/manager.gd"
 const AUTOLOAD_NAME := "RulebooksManager"
 
 
@@ -13,7 +14,7 @@ var floating_window_mode: bool = false
 
 # Initialization of the plugin.
 func _enter_tree() -> void:
-	add_autoload_singleton(AUTOLOAD_NAME, "res://addons/godot_rulebook/src/manager.gd")
+	add_autoload_singleton(AUTOLOAD_NAME, MANAGER_PATH)
 	main_panel_instance = MAIN_PANEL.instantiate()
 	main_panel_instance.make_floating.connect(make_floating_window)
 	main_screen_changed.connect(check_window_focus)
@@ -21,6 +22,9 @@ func _enter_tree() -> void:
 	EditorInterface.get_editor_main_screen().add_child(main_panel_instance)
 	for rulebook in RulebookEditorIO.load_all_saved():
 		main_panel_instance.add_rulebook(rulebook)
+	main_panel_instance.add_hint.connect(RulebooksManager.add_hint)
+	main_panel_instance.edit_hint.connect(RulebooksManager.edit_hint)
+	main_panel_instance.remove_hint.connect(RulebooksManager.remove_hint)
 	# Hide the main panel. Very much required.
 	_make_visible(false)
 

@@ -21,16 +21,9 @@ theme_override_constants/separation = 10
 [node name="MonitorableTypeOptions" type="OptionButton" parent="Header"]
 unique_name_in_owner = true
 layout_mode = 2
+selected = -1
 allow_reselect = true
-item_count = 4
-popup/item_0/text = "Card"
-popup/item_0/id = 0
-popup/item_1/text = "Character"
-popup/item_1/id = 1
-popup/item_2/text = "Enemy"
-popup/item_2/id = 2
-popup/item_3/text = "Weapon"
-popup/item_3/id = 3
+item_count = 0
 
 [node name="MonitorableIdentifier" type="LineEdit" parent="Header"]
 unique_name_in_owner = true

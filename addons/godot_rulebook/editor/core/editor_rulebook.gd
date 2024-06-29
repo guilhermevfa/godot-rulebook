@@ -2,8 +2,12 @@
 class_name EditorRulebook
 extends PanelContainer
 
+signal delete_rulebook(rulebook: EditorRulebook)
+signal name_changed(old: String, new: String)
+
 
 func _on_rulebook_name_text_changed(new_text: String) -> void:
+	name_changed.emit(name, new_text)
 	name = new_text
 
 
@@ -25,6 +29,7 @@ func get_rules() -> Array[EditorRule]:
 
 
 func _on_delete_rulebook_pressed() -> void:
+	delete_rulebook.emit(self)
 	queue_free()
 
 

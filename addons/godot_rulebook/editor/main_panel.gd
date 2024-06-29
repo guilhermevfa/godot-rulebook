@@ -2,6 +2,9 @@
 class_name RulebookMainPanel
 extends PanelContainer
 
+signal add_hint(rulebook_name: String)
+signal edit_hint(old_name: String, new_name: String)
+signal remove_hint(rulebook_name: String)
 signal make_floating
 var suffix: int = 1
 
@@ -14,9 +17,20 @@ func get_rulebooks() -> Array[EditorRulebook]:
 	return result
 
 
-func add_rulebook(rulebook: Control, custom_position: int = 0) -> void:
+func add_rulebook(rulebook: EditorRulebook, custom_position: int = 0) -> void:
 	%TabContainer.add_child(rulebook)
 	%TabContainer.move_child(rulebook, custom_position)
+	add_hint.emit(rulebook.name)
+	rulebook.name_changed.connect(on_rulebook_name_changed)
+	rulebook.delete_rulebook.connect(on_delete_rulebook)
+
+
+func on_rulebook_name_changed(old_name: String, new_name: String):
+	edit_hint.emit(old_name, new_name)
+
+
+func on_delete_rulebook(rulebook: EditorRulebook):
+	remove_hint.emit(rulebook.name)
 
 
 func create_rulebook() -> void:

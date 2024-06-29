@@ -34,10 +34,15 @@ static func build_network_rule(rule: Rule, context: Dictionary) -> NetworkRule:
 static func build_network_predicate(predicate: Predicate, context: Dictionary) -> NetworkPredicate:
 	var network_predicate: NetworkPredicate = NetworkPredicate.new()
 	predicate_copy(predicate, network_predicate)
+	
 	for premise in predicate.premises:
 		var network_premise := build_network_premise(premise, context)
 		network_predicate.premises.append(network_premise)
-	network_predicate.premises.append(create_id_premise(predicate))
+	
+	var id_premise := create_id_premise(predicate)
+	var network_id_premise := build_network_premise(id_premise, context)
+	network_predicate.premises.append(network_id_premise)
+	
 	network_predicate.premises.sort_custom(sort_premises)
 	return network_predicate
 
@@ -58,9 +63,9 @@ static func build_network_premise(premise: Premise, context: Dictionary) -> Netw
 	return network_premise
 
 
-static func create_id_premise(predicate: NetworkPredicate) -> NetworkPremise:
-	var premise := NetworkPremise.new()
-	premise.type = predicate.monitorable_type
+static func create_id_premise(predicate: Predicate) -> Premise:
+	var premise := Premise.new()
+	premise.monitorable_type = predicate.monitorable_type
 	premise.attribute = "holder"
 	premise.operator = "=="
 	premise.operand_type = Premise.OperandType.VARIABLE
@@ -69,7 +74,7 @@ static func create_id_premise(predicate: NetworkPredicate) -> NetworkPremise:
 
 
 static func premise_copy(origin: Premise, target: NetworkPremise) -> void:
-	target.type = origin.type
+	target.monitorable_type = origin.monitorable_type
 	target.attribute = origin.attribute
 	target.operator = origin.operator
 	target.operand_type = origin.operand_type

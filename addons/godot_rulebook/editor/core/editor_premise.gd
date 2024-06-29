@@ -43,14 +43,15 @@ func update_operand_type_list():
 
 
 func set_monitorable_hints(script: Script) -> void:
-	monitorable_script = script
-	
-	%AttributeOption.clear()
-	%AttributeField.get_node("AttributeOption").clear()
-	if script:
-		for attribute in get_attribute_hints():
-			%AttributeOption.add_item(attribute)
-			%AttributeField.get_node("AttributeOption").add_item(attribute)
+	if monitorable_script != script:
+		monitorable_script = script
+		
+		%AttributeOption.clear()
+		%AttributeField.get_node("AttributeOption").clear()
+		if script:
+			for attribute in get_attribute_hints():
+				%AttributeOption.add_item(attribute)
+				%AttributeField.get_node("AttributeOption").add_item(attribute)
 
 
 func get_attribute_hints() -> Array[String]:
@@ -65,6 +66,8 @@ func is_valid_attribute(attr: String) -> bool:
 	var result: bool = (
 		attr != "holder"
 		and attr != "rulebook"
+		and attr != "rulebook_name"
+		and attr != "auto_monitoring"
 		and not attr.ends_with(".gd")
 	)
 	return result

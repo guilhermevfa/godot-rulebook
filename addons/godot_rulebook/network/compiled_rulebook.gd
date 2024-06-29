@@ -8,13 +8,13 @@ var effects_queue: Array[Effect]
 
 func add_monitorable_instance(instance: Monitorable) -> void:
 	var instance_class: String = instance.get_script().get_global_name()
-	var class_premises: Array[NetworkPremise] = premises[instance_class]
+	var class_premises: Array = premises.get(instance_class, [])
 	for premise in class_premises:
 		premise.connect_instance(instance)
 
 
 func add_premise(premise: NetworkPremise) -> void:
-	var class_premises: Array[NetworkPremise] = premises[premise.monitorable_type]
+	var class_premises: Array = premises.get_or_add(premise.monitorable_type, [])
 	class_premises.append(premise)
 
 
@@ -49,5 +49,5 @@ func execute():
 		effect.start_monitoring(self)
 		while not conflict_set.is_empty():
 			var rule: NetworkRule = conflict_set.pop()
-			rule.resolve()
+			await rule.resolve(self)
 		effect.queue_free()

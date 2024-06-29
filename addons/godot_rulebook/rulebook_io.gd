@@ -1,7 +1,7 @@
 class_name RulebookIO
 
 
-static var SAVED_RULEBOOKS_PATH := "res://addons/godot_rulebook/editor/saved_rulebooks/"
+const SAVED_RULEBOOKS_PATH := "res://addons/godot_rulebook/editor/saved_rulebooks/"
 #static var COMPILED_RULEBOOKS_PATH := "res://addons/godot_rulebook/compiled_rulebooks/"
 
 
@@ -26,7 +26,7 @@ static func save(rulebook: Rulebook) -> void:
 	var packed_scene = PackedScene.new()
 	var result = packed_scene.pack(rulebook)
 	if result == OK:
-		if not DirAccess.open(SAVED_RULEBOOKS_PATH):
+		if not DirAccess.dir_exists_absolute(SAVED_RULEBOOKS_PATH):
 			DirAccess.make_dir_absolute(SAVED_RULEBOOKS_PATH)
 		var error = ResourceSaver.save(packed_scene, SAVED_RULEBOOKS_PATH + rulebook.name + ".tscn")
 		if error != OK:

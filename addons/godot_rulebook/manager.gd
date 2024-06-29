@@ -15,6 +15,11 @@ func add_hint(_name: String) -> void:
 	rulebook_names.append(_name)
 
 
+func edit_hint(old: String, new: String) -> void:
+	rulebook_names.erase(old)
+	rulebook_names.append(new)
+
+
 func remove_hint(_name: String) -> void:
 	rulebook_names.erase(_name)
 

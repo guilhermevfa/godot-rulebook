@@ -23,9 +23,10 @@ func on_remove_solution(solution: Dictionary) -> void:
 		unsatisfied.emit(self)
 
 
-func resolve() -> void:
+func resolve(rulebook: Rulebook) -> void:
 	var resolution_script: Resolution = load(resolution_path).new()
 	for solution in solutions:
 		resolution_script._match = solution
-		resolution_script._resolve()
+		resolution_script.rulebook = rulebook
+		await resolution_script._resolve()
 	solutions.clear()

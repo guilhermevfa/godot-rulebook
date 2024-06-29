@@ -16,7 +16,7 @@ func update_monitorable_type_options():
 	
 	%MonitorableTypeOptions.clear()
 	for class_dict in ProjectSettings.get_global_class_list():
-		if class_dict["base"] == "Monitorable":
+		if inherits_monitorable(class_dict):
 			var option: String = class_dict["class"].trim_prefix("Monitorable")
 			%MonitorableTypeOptions.add_item(option)
 	
@@ -25,6 +25,17 @@ func update_monitorable_type_options():
 			if %MonitorableTypeOptions.get_item_text(index) == selected_text:
 				%MonitorableTypeOptions.select(index)
 				break
+
+
+func inherits_monitorable(class_dict: Dictionary) -> bool:
+	var base_class: String = class_dict["base"]
+	if base_class == "Monitorable":
+		return true
+	else:
+		for dict in ProjectSettings.get_global_class_list():
+			if dict["class"] == base_class:
+				return inherits_monitorable(dict)
+	return false
 
 
 func _on_add_premise_pressed():
@@ -38,13 +49,14 @@ func add_premise(premise: EditorPremise):
 
 
 func _on_monitorable_type_item_selected(index: int):
-	set_monitorable("Monitorable" + %MonitorableTypeOptions.get_item_text(index))
+	set_monitorable(%MonitorableTypeOptions.get_item_text(index))
 
 
 func set_monitorable(_monitorable_type: String):
 	monitorable_type = _monitorable_type
 	for class_dict in ProjectSettings.get_global_class_list():
-		if class_dict["class"] == monitorable_type:
+		if class_dict["class"] == monitorable_type \
+		or class_dict["class"] == "Monitorable" + monitorable_type:
 			monitorable_script = load(class_dict["path"])
 	
 	for child in %Premises.get_children():
